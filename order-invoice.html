@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Order invoice</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+        html,
+        body {
+            min-height: 100%;
+        }
+
+        body,
+        div,
+        form,
+        input,
+        select,
+        p {
+            padding: 0;
+            margin: 0;
+            outline: none;
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 14px;
+            color: #666;
+            line-height: 22px;
+        }
+
+        h1 {
+            margin: 15px 0;
+            font-weight: 400;
+        }
+
+        .testbox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: inherit;
+            padding: 3px;
+        }
+
+        form {
+            width: 100%;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px #ccc;
+        }
+
+        input,
+        select,
+        textarea {
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input {
+            width: calc(100% - 10px);
+            padding: 5px;
+        }
+
+        select {
+            width: 100%;
+            padding: 7px 0;
+            background: transparent;
+        }
+
+        textarea {
+            width: calc(100% - 6px);
+        }
+
+        .item {
+            position: relative;
+            margin: 10px 0;
+        }
+
+        .item:hover p,
+        .item:hover i {
+            color: #095484;
+        }
+
+        input:hover,
+        select:hover,
+        textarea:hover,
+        .preferred-metod label:hover input {
+            box-shadow: 0 0 5px 0 #095484;
+        }
+
+        .preferred-metod label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .preferred-metod:hover input {
+            box-shadow: none;
+        }
+
+        .preferred-metod-item input,
+        .preferred-metod-item span {
+            width: auto;
+            vertical-align: middle;
+        }
+
+        .preferred-metod-item input {
+            margin: 0 5px 0 0;
+        }
+
+        input[type="date"]::-webkit-inner-spin-button {
+            display: none;
+        }
+
+        .item i,
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            position: absolute;
+            font-size: 20px;
+            color: #a9a9a9;
+        }
+
+        .item i {
+            right: 1%;
+            top: 30px;
+            z-index: 1;
+        }
+
+        [type="date"]::-webkit-calendar-picker-indicator {
+            right: 0;
+            z-index: 2;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .btn-block {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            width: 150px;
+            padding: 10px;
+            border: none;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            background-color: #095484;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0666a3;
+        }
+
+        @media (min-width: 568px) {
+
+            .name-item,
+            .city-item,
+            .group-input {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+
+            .name-item input,
+            .city-item input,
+            .group-input input {
+                width: calc(50% - 20px);
+            }
+
+            .city-item select {
+                width: calc(50% - 8px);
+            }
+        }
+    </style>
+
+    <script>
+        // https://docs.google.com/spreadsheets/d/1UMDUIxw8m6i4mKjOE4BLl7PsGKN1NgUdmTOn9uNpz_U/edit#gid=0
+        // https://script.google.com/macros/s/AKfycbzogA12W4n6aHci8dTRX8pBIiHEOjDmqmKoBqUNM_3_bu5SzFq7sZ9EdX07aotWA6Bt/exec
+
+        var total = 0;
+        var discount = 0;
+
+        function calculate() {
+            let prices =   document.querySelectorAll(".price");
+        
+
+            for(let i=0; i< prices.length; i++){
+                let item = prices[i];
+                total += Number(item.value);
+            }
+
+            total -= Number(document.querySelector(".discount").value);
+
+          
+            document.getElementById("total").innerHTML = Number(total).toFixed(2);
+
+        }
+
+
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxusnNrmUn__VEy-k7oFaNJwcOxJDoS0WeUtWtueJqakwPmy14XcA7XpNzzkRTE3sqT/exec'
+        const form = document.forms['submit-to-google-sheet']
+
+
+        form.addEventListener('submit', e => {
+
+            e.preventDefault()
+            var form =  new FormData(document.querySelector('form'))
+
+            form.append("total",total);
+            form.discount("discount",discount)
+
+            fetch(scriptURL, { method: 'POST', body: form  })
+                .then(response => {
+                    console.log("success",response);
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+
+    </script>
+</head>
+
+<body>
+    <div class="testbox">
+        <form action="/">
+            <h1>Biểu mẫu demo tạo hóa đơn cho nhân viên</h1>
+            <h5>Các trường sau đây là giả định theo nhu cầu</h5>
+            <div class="item">
+                <p>Mã số hóa đơn - Ngày tham chiếu (ngày tạo)</p>
+                <div class="group-input">
+                    <input type="text" name="Invoice Number" />
+                    <input type="datetime" name="Invoice Date" placeholder="Invoice Date" />
+                </div>
+            </div>
+
+
+            <div class="item">
+                <p>Họ tên người gửi </p>
+                <div class="group-input">
+                    <input type="text" name="Full Name" />
+                    <input type="tel" name="Phone" placeholder="Phone" />
+                </div>
+            </div>
+            <div class="item">
+                <p>Địa chỉ người gửi</p>
+                <input type="text" name="Street Address" />
+            </div>
+
+            <div class="item">
+                <p>Địa chỉ email nhận thư</p>
+                <input type="text" name="Email" />
+            </div>
+
+            <div class="item">
+                <p>Ngày hết hạn hóa đơn </p>
+                <input type="text" name="Due Date" />
+            </div>
+
+
+            <div class="item">
+                <h3>Thêm dữ liệu sản phẩm</h3>
+                <div class="group-input-product">
+                    <p>Sản phẩm 1</p>
+                    <input class="calculate" type="text" name="unit1" placeholder="Thêm sản phẩm" />
+                    <input class="calculate" type="text" name="description1" placeholder="Mô tả sản phẩm " />
+                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                        type="number" name="price1" placeholder="Giá" />
+                </div>
+                <div class="group-input-product">
+                    <p>Sản phẩm 2</p>
+                    <input class="calculate" type="text" name="unit2" placeholder="Thêm sản phẩm" />
+                    <input class="calculate" type="text" name="description2" placeholder="Mô tả sản phẩm " />
+                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                        type="number" name="price2" placeholder="Giá" />
+                </div>
+                <div class="group-input-product">
+                    <p>Sản phẩm 3</p>
+                    <input class="calculate" type="text" name="unit3" placeholder="Thêm sản phẩm" />
+                    <input class="calculate" type="text" name="description3" placeholder="Mô tả sản phẩm " />
+                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                        type="number" name="price3" placeholder="Giá" />
+                </div>
+                <div class="group-input-product">
+                    <p>Sản phẩm 4</p>
+                    <input class="calculate" type="text" name="unit4" placeholder="Thêm sản phẩm" />
+                    <input class="calculate" type="text" name="description4" placeholder="Mô tả sản phẩm " />
+                    <input onmouseenter="calculate(this)" onmouseleave="calculate" class="calculate price" type="number"
+                        name="price4" placeholder="Giá" />
+                </div>
+                <div class="group-input-product">
+                    <p>Sản phẩm 5</p>
+                    <input class="calculate" type="text" name="unit5" placeholder="Thêm sản phẩm 1" />
+                    <input class="calculate" type="text" name="description5" placeholder="Mô tả sản phẩm " />
+                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                        type="number" name="price5" placeholder="Giá" />
+                </div>
+            </div>
+
+            <div class="item">
+                <p>Mã Giảm Giá </p>
+                <input onmouseleave="calculate(this)" class="calculate discount" type="number" name="discount" />
+            </div>
+
+            <div class="item">
+                <p> Thành tiền : $ <span id="total">0</span></p>
+            </div>
+
+            <div class="btn-block">
+                <button type="submit" href="/">Tạo hóa đơn</button>
+            </div>
+        </form>
+    </div>
+
+
+
+</body>
+
+</html>
