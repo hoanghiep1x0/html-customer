@@ -273,6 +273,7 @@
 
         var total = 0;
         var discount = 0;
+        var sub_total = 0;
 
         function calculate() {
             total = 0;
@@ -283,9 +284,9 @@
                 total += Number(item.value);
             }
 
+            sub_total = total;
             total -= Number(document.querySelector(".discount").value);
 
-          
             document.getElementById("total").innerHTML = Number(total).toFixed(2);
 
         }
@@ -301,6 +302,8 @@
             var form =  new FormData(document.querySelector('form'))
 
             form.append("total",total);
+            form.append("sub_total",sub_total);
+            
             form.append("discount",discount)
 
             fetch(scriptURL, { method: 'POST', body: form  })
