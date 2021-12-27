@@ -174,63 +174,19 @@
         }
     </style>
 
-    <script>
-        // https://docs.google.com/spreadsheets/d/1UMDUIxw8m6i4mKjOE4BLl7PsGKN1NgUdmTOn9uNpz_U/edit#gid=0
-        // https://script.google.com/macros/s/AKfycbzogA12W4n6aHci8dTRX8pBIiHEOjDmqmKoBqUNM_3_bu5SzFq7sZ9EdX07aotWA6Bt/exec
-
-        var total = 0;
-        var discount = 0;
-
-        function calculate() {
-            let prices =   document.querySelectorAll(".price");
-        
-
-            for(let i=0; i< prices.length; i++){
-                let item = prices[i];
-                total += Number(item.value);
-            }
-
-            total -= Number(document.querySelector(".discount").value);
-
-          
-            document.getElementById("total").innerHTML = Number(total).toFixed(2);
-
-        }
-
-
-
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxusnNrmUn__VEy-k7oFaNJwcOxJDoS0WeUtWtueJqakwPmy14XcA7XpNzzkRTE3sqT/exec'
-        const form = document.forms['submit-to-google-sheet']
-
-
-        form.addEventListener('submit', e => {
-
-            e.preventDefault()
-            var form =  new FormData(document.querySelector('form'))
-
-            form.append("total",total);
-            form.discount("discount",discount)
-
-            fetch(scriptURL, { method: 'POST', body: form  })
-                .then(response => {
-                    console.log("success",response);
-                })
-                .catch(error => console.error('Error!', error.message))
-        })
-
-    </script>
+   
 </head>
 
 <body>
     <div class="testbox">
-        <form action="/">
+        <form name="submit-to-google-sheet">
             <h1>Biểu mẫu demo tạo hóa đơn cho nhân viên</h1>
             <h5>Các trường sau đây là giả định theo nhu cầu</h5>
             <div class="item">
                 <p>Mã số hóa đơn - Ngày tham chiếu (ngày tạo)</p>
                 <div class="group-input">
-                    <input type="text" name="Invoice Number" />
-                    <input type="datetime" name="Invoice Date" placeholder="Invoice Date" />
+                    <input type="text" name="Invoice Number" placeholder="số hóa đơn" />
+                    <input type="text" name="Invoice Date" placeholder="ngày tạo hóa đơn : 20-12-2022" />
                 </div>
             </div>
 
@@ -238,23 +194,23 @@
             <div class="item">
                 <p>Họ tên người gửi </p>
                 <div class="group-input">
-                    <input type="text" name="Full Name" />
-                    <input type="tel" name="Phone" placeholder="Phone" />
+                    <input type="text" name="Full Name" placeholder="Họ và Tên" />
+                    <input type="tel" name="Phone" placeholder="Số điện thoại" />
                 </div>
             </div>
             <div class="item">
                 <p>Địa chỉ người gửi</p>
-                <input type="text" name="Street Address" />
+                <input type="text" name="Street Address"  placeholder="Địa chỉ người gửi"/>
             </div>
 
             <div class="item">
                 <p>Địa chỉ email nhận thư</p>
-                <input type="text" name="Email" />
+                <input type="text" name="Email" placeholder="Địa chỉ nhận thông báo qua email"/>
             </div>
 
             <div class="item">
                 <p>Ngày hết hạn hóa đơn </p>
-                <input type="text" name="Due Date" />
+                <input type="text" name="Due Date" placeholder="ngày hết hạn hóa đơn" />
             </div>
 
 
@@ -307,11 +263,54 @@
             </div>
 
             <div class="btn-block">
-                <button type="submit" href="/">Tạo hóa đơn</button>
+                <button type="submit">Tạo hóa đơn</button>
             </div>
         </form>
     </div>
+    <script>
+        // https://docs.google.com/spreadsheets/d/1UMDUIxw8m6i4mKjOE4BLl7PsGKN1NgUdmTOn9uNpz_U/edit#gid=0
+        // https://script.google.com/macros/s/AKfycbzogA12W4n6aHci8dTRX8pBIiHEOjDmqmKoBqUNM_3_bu5SzFq7sZ9EdX07aotWA6Bt/exec
 
+        var total = 0;
+        var discount = 0;
+
+        function calculate() {
+            total = 0;
+            let prices =   document.querySelectorAll(".price");
+        
+            for(let i=0; i< prices.length; i++){
+                let item = prices[i];
+                total += Number(item.value);
+            }
+
+            total -= Number(document.querySelector(".discount").value);
+
+          
+            document.getElementById("total").innerHTML = Number(total).toFixed(2);
+
+        }
+
+
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbxusnNrmUn__VEy-k7oFaNJwcOxJDoS0WeUtWtueJqakwPmy14XcA7XpNzzkRTE3sqT/exec'
+        const form = document.forms['submit-to-google-sheet']
+
+        form.addEventListener('submit', e => {
+
+            e.preventDefault()
+            var form =  new FormData(document.querySelector('form'))
+
+            form.append("total",total);
+            form.append("discount",discount)
+
+            fetch(scriptURL, { method: 'POST', body: form  })
+                .then(response => {
+                    console.log("success",response);
+                })
+                .catch(error => console.error('Error!', error.message))
+        })
+
+    </script>
 
 
 </body>
