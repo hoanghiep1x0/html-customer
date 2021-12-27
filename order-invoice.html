@@ -173,8 +173,8 @@
             }
         }
     </style>
+    <script src="./validate.js"></script>
 
-   
 </head>
 
 <body>
@@ -186,7 +186,7 @@
                 <p>Mã số hóa đơn - Ngày tham chiếu (ngày tạo)</p>
                 <div class="group-input">
                     <input type="text" name="Invoice Number" placeholder="số hóa đơn" />
-                    <input type="text" name="Invoice Date" placeholder="ngày tạo hóa đơn : 20-12-2022" />
+                    <input type="date" name="Invoice Date" placeholder="ngày tạo hóa đơn : 20-12-2022" />
                 </div>
             </div>
 
@@ -200,17 +200,17 @@
             </div>
             <div class="item">
                 <p>Địa chỉ người gửi</p>
-                <input type="text" name="Street Address"  placeholder="Địa chỉ người gửi"/>
+                <input type="text" name="Street Address" placeholder="Địa chỉ người gửi" />
             </div>
 
             <div class="item">
                 <p>Địa chỉ email nhận thư</p>
-                <input type="text" name="Email" placeholder="Địa chỉ nhận thông báo qua email"/>
+                <input type="text" name="Email" placeholder="Địa chỉ nhận thông báo qua email" />
             </div>
 
             <div class="item">
                 <p>Ngày hết hạn hóa đơn </p>
-                <input type="text" name="Due Date" placeholder="ngày hết hạn hóa đơn" />
+                <input type="date" name="Due Date" placeholder="ngày hết hạn hóa đơn" />
             </div>
 
 
@@ -221,35 +221,35 @@
                     <input class="calculate" type="text" name="unit1" placeholder="Thêm sản phẩm" />
                     <input class="calculate" type="text" name="description1" placeholder="Mô tả sản phẩm " />
                     <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="number" name="price1" placeholder="Giá" />
+                        type="text" name="price1" placeholder="Giá" />
                 </div>
                 <div class="group-input-product">
                     <p>Sản phẩm 2</p>
                     <input class="calculate" type="text" name="unit2" placeholder="Thêm sản phẩm" />
                     <input class="calculate" type="text" name="description2" placeholder="Mô tả sản phẩm " />
                     <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="number" name="price2" placeholder="Giá" />
+                        type="text" name="price2" placeholder="Giá" />
                 </div>
                 <div class="group-input-product">
                     <p>Sản phẩm 3</p>
                     <input class="calculate" type="text" name="unit3" placeholder="Thêm sản phẩm" />
                     <input class="calculate" type="text" name="description3" placeholder="Mô tả sản phẩm " />
                     <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="number" name="price3" placeholder="Giá" />
+                        type="text" name="price3" placeholder="Giá" />
                 </div>
                 <div class="group-input-product">
                     <p>Sản phẩm 4</p>
                     <input class="calculate" type="text" name="unit4" placeholder="Thêm sản phẩm" />
                     <input class="calculate" type="text" name="description4" placeholder="Mô tả sản phẩm " />
                     <input onmouseenter="calculate(this)" onmouseleave="calculate" class="calculate price" type="number"
-                        name="price4" placeholder="Giá" />
+                        name="text" placeholder="Giá" />
                 </div>
                 <div class="group-input-product">
                     <p>Sản phẩm 5</p>
                     <input class="calculate" type="text" name="unit5" placeholder="Thêm sản phẩm 1" />
                     <input class="calculate" type="text" name="description5" placeholder="Mô tả sản phẩm " />
                     <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="number" name="price5" placeholder="Giá" />
+                        type="text" name="price5" placeholder="Giá" />
                 </div>
             </div>
 
@@ -271,15 +271,32 @@
         // https://docs.google.com/spreadsheets/d/1UMDUIxw8m6i4mKjOE4BLl7PsGKN1NgUdmTOn9uNpz_U/edit#gid=0
         // https://script.google.com/macros/s/AKfycbzogA12W4n6aHci8dTRX8pBIiHEOjDmqmKoBqUNM_3_bu5SzFq7sZ9EdX07aotWA6Bt/exec
 
+
+        var submit = false;
         var total = 0;
         var discount = 0;
         var sub_total = 0;
 
+        var erros = {
+            field_1: null,
+            field_2: null,
+            field_3: null,
+            field_4: null,
+            field_5: null,
+            field_6: null,
+            field_7: null,
+            field_8: null,
+            field_9: null,
+            field_10: null,
+            field_11: null,
+        }
+
+
         function calculate() {
             total = 0;
-            let prices =   document.querySelectorAll(".price");
-        
-            for(let i=0; i< prices.length; i++){
+            let prices = document.querySelectorAll(".price");
+
+            for (let i = 0; i < prices.length; i++) {
                 let item = prices[i];
                 total += Number(item.value);
             }
@@ -293,24 +310,130 @@
 
 
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxusnNrmUn__VEy-k7oFaNJwcOxJDoS0WeUtWtueJqakwPmy14XcA7XpNzzkRTE3sqT/exec'
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwgmIysuSY6uez6VdzmVzBauouq0xwbkF-VTOBKHM4-rsFm4XlwPafZaEvPEp8Nh-9B/exec'
         const form = document.forms['submit-to-google-sheet']
 
         form.addEventListener('submit', e => {
 
             e.preventDefault()
-            var form =  new FormData(document.querySelector('form'))
 
-            form.append("total",total);
-            form.append("sub_total",sub_total);
+
+            var _form = new FormData(document.querySelector('form'))
+
+
+            // start validate 
+            let form = {
+                ivcNumber: _form.get("Invoice Number"),
+                ivcDate: _form.get("Invoice Date"),
+                fullname: _form.get("Full Name"),
+                phone: _form.get("Phone"),
+                add: _form.get("Street Address"),
+                email: _form.get("Email"),
+                DueDate: _form.get("Due Date"),
+                unit1: _form.get("unit1"),
+                description1:_form.get("description1"),
+                price1: _form.get("price1")
+            }
+
+            if (!validate.isString(form.ivcNumber) || validate.isEmpty(form.ivcNumber)) {
+                erros.field_1 = "Mã hóa đơn phải là chuỗi kí tự không được để trống"
+            }else{
+                erros.field_1 = null
+            }
+
+            if (validate.isEmpty(form.ivcDate)) {
+                erros.field_2 = "Ngày tạo hóa đơn cú pháp không hợp lệ"
+            }else{
+                erros.field_2 = null
+            }
+
+            if (!validate.isString(form.fullname) || validate.isEmpty(form.fullname)) {
+                erros.field_3 = "Tên người gửi không hợp lệ"
+            }else{
+                erros.field_3 = null
+            }
+
+            if (!validate.isNumber(Number(form.phone)) || validate.isEmpty(form.phone)) {
+               erros.field_4 = "Số phone không hợp lệ"
+            }else{
+                erros.field_4 = null
+            }
+
+            if (!validate.isString(form.add) || validate.isEmpty(form.add) || form.add.length <12) {
+                erros.field_5 = "Địa chỉ người gửi không hợp lệ"
+            }else{
+                erros.field_5 = null
+            }
+
+            let checkErrEmail = validate({from: form.email}, {
+                    from: {
+                        email: true
+                    }
+            });
+
+
+            if(checkErrEmail){
+                erros.field_6 = "Địa chỉ email không hợp lệ"
+            }else{
+                erros.field_6 = null
+            }
+
+
+            if (validate.isDate(form.DueDate)) {
+                erros.field_7 = "Ngày tạo hết hạn hóa đơn không hợp lệ"
+            }else{
+                erros.field_7 = null
+            }
+
+
+            if (!validate.isString(form.unit1) || validate.isEmpty(form.unit1) || form.add.length <12) {
+                erros.field_8 = "Tên sản phẩm phải là chuỗi và không được rỗng"
+            }else{
+                erros.field_8 = null
+            }
+
+            if (!validate.isString(form.description1) || validate.isEmpty(form.description1)) {
+                erros.field_9 = "Mô tả sản phẩm không được rỗng"
+            }else{
+                erros.field_10 = null
+            }
+
+
+            if (!validate.isNumber(Number(form.price1)) || validate.isEmpty(form.price1)) {
+                erros.field_11= "Giá sản phẩm không được rỗng và phải là số hợp lệ"
+            }else{
+                erros.field_11 = null
+            }
             
-            form.append("discount",discount)
+            // end validate
 
-            fetch(scriptURL, { method: 'POST', body: form  })
-                .then(response => {
-                   alert("Thêm dữ liệu thành công");
-                })
-                .catch(error => console.error('Error!', error.message))
+            submit = true;
+
+            for(key in erros){
+                let item = erros[key];
+                if(item){
+                    submit= false
+                    console.log("SUBMIT FAILD")
+                }
+            }
+
+            
+
+            if (submit) {
+                _form.append("total", total);
+                _form.append("sub_total", sub_total);
+
+                _form.append("Discount", discount)
+
+                alert("Đang gửi dữ liệu vui lòng chờ...")
+                fetch(scriptURL, { method: 'POST', body: _form })
+                    .then(response => {
+                        alert("Nhập dữ liệu thành công")
+                    })
+                    .catch(error => console.error('Error!', error.message))
+            }
+
+
         })
 
     </script>
