@@ -347,7 +347,7 @@
                 erros.field_2 = null
             }
 
-            if (!validate.isString(form.fullname) || validate.isEmpty(form.fullname)) {
+            if (validate.isEmpty(form.fullname)) {
                 erros.field_3 = "Tên người gửi không hợp lệ"
             }else{
                 erros.field_3 = null
@@ -359,7 +359,7 @@
                 erros.field_4 = null
             }
 
-            if (!validate.isString(form.add) || validate.isEmpty(form.add) || form.add.length <12) {
+            if ( validate.isEmpty(form.add)) {
                 erros.field_5 = "Địa chỉ người gửi không hợp lệ"
             }else{
                 erros.field_5 = null
@@ -386,13 +386,13 @@
             }
 
 
-            if (!validate.isString(form.unit1) || validate.isEmpty(form.unit1) || form.add.length <12) {
+            if (!validate.isString(form.unit1) || validate.isEmpty(form.unit1)) {
                 erros.field_8 = "Tên sản phẩm phải là chuỗi và không được rỗng"
             }else{
                 erros.field_8 = null
             }
 
-            if (!validate.isString(form.description1) || validate.isEmpty(form.description1)) {
+            if (validate.isEmpty(form.description1)) {
                 erros.field_9 = "Mô tả sản phẩm không được rỗng"
             }else{
                 erros.field_9 = null
