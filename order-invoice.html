@@ -395,14 +395,14 @@
             if (!validate.isString(form.description1) || validate.isEmpty(form.description1)) {
                 erros.field_9 = "Mô tả sản phẩm không được rỗng"
             }else{
-                erros.field_10 = null
+                erros.field_9 = null
             }
 
 
             if (!validate.isNumber(Number(form.price1)) || validate.isEmpty(form.price1)) {
-                erros.field_11= "Giá sản phẩm không được rỗng và phải là số hợp lệ"
+                erros.field_10= "Giá sản phẩm không được rỗng và phải là số hợp lệ"
             }else{
-                erros.field_11 = null
+                erros.field_10 = null
             }
             
             // end validate
