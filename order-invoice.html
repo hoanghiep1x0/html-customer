@@ -6,290 +6,659 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <style>
-        html,
-        body {
-            min-height: 100%;
-        }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-        body,
-        div,
-        form,
-        input,
-        select,
-        p {
-            padding: 0;
-            margin: 0;
-            outline: none;
-            font-family: Roboto, Arial, sans-serif;
-            font-size: 14px;
-            color: #666;
-            line-height: 22px;
-        }
+    <link href="./css/style.css" rel="stylesheet" />
+    <link href="./css/steper.css" rel="stylesheet" />
 
-        h1 {
-            margin: 15px 0;
-            font-weight: 400;
-        }
-
-        .testbox {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: inherit;
-            padding: 3px;
-        }
-
-        form {
-            width: 100%;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 2px 5px #ccc;
-        }
-
-        input,
-        select,
-        textarea {
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-
-        input {
-            width: calc(100% - 10px);
-            padding: 5px;
-        }
-
-        select {
-            width: 100%;
-            padding: 7px 0;
-            background: transparent;
-        }
-
-        textarea {
-            width: calc(100% - 6px);
-        }
-
-        .item {
-            position: relative;
-            margin: 10px 0;
-        }
-
-        .item:hover p,
-        .item:hover i {
-            color: #095484;
-        }
-
-        input:hover,
-        select:hover,
-        textarea:hover,
-        .preferred-metod label:hover input {
-            box-shadow: 0 0 5px 0 #095484;
-        }
-
-        .preferred-metod label {
-            display: block;
-            margin: 5px 0;
-        }
-
-        .preferred-metod:hover input {
-            box-shadow: none;
-        }
-
-        .preferred-metod-item input,
-        .preferred-metod-item span {
-            width: auto;
-            vertical-align: middle;
-        }
-
-        .preferred-metod-item input {
-            margin: 0 5px 0 0;
-        }
-
-        input[type="date"]::-webkit-inner-spin-button {
-            display: none;
-        }
-
-        .item i,
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            position: absolute;
-            font-size: 20px;
-            color: #a9a9a9;
-        }
-
-        .item i {
-            right: 1%;
-            top: 30px;
-            z-index: 1;
-        }
-
-        [type="date"]::-webkit-calendar-picker-indicator {
-            right: 0;
-            z-index: 2;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .btn-block {
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        button {
-            width: 150px;
-            padding: 10px;
-            border: none;
-            -webkit-border-radius: 5px;
-            -moz-border-radius: 5px;
-            border-radius: 5px;
-            background-color: #095484;
-            font-size: 16px;
-            color: #fff;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0666a3;
-        }
-
-        @media (min-width: 568px) {
-
-            .name-item,
-            .city-item,
-            .group-input {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-
-            .name-item input,
-            .city-item input,
-            .group-input input {
-                width: calc(50% - 20px);
-            }
-
-            .city-item select {
-                width: calc(50% - 8px);
-            }
-        }
-    </style>
-    <script src="./validate.js"></script>
+    <script src="./plugins/jquery.js"></script>
+    <script src="./plugins/jquery.steps.min.js"></script>
+    <script src="./plugins/validate.js"></script>
 
 </head>
 
 <body>
-    <div class="testbox">
-        <form name="submit-to-google-sheet">
-            <h1>Biểu mẫu demo tạo hóa đơn cho nhân viên</h1>
-            <h5>Các trường sau đây là giả định theo nhu cầu</h5>
-            <div class="item">
-                <p>Mã số hóa đơn - Ngày tham chiếu (ngày tạo)</p>
-                <div class="group-input">
-                    <input type="text" name="Invoice Number" placeholder="số hóa đơn" />
-                    <input type="date" name="Invoice Date" placeholder="ngày tạo hóa đơn : 20-12-2022" />
+
+    <form class="container" name="submit-to-google-sheet">
+        <div class="accordion" id="formSteps">
+            <div class="steps">
+                <progress id="progress" value=0 max=100></progress>
+                <div class="step-item">
+                    <button class="step-button text-center" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        1
+                    </button>
+                    <div class="step-title">
+                        From Data
+                    </div>
+                </div>
+                <div class="step-item">
+                    <button class="step-button text-center collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        2
+                    </button>
+                    <div class="step-title">
+                        Customer Information
+                    </div>
+                </div>
+                <div class="step-item">
+                    <button class="step-button text-center collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        3
+                    </button>
+                    <div class="step-title">
+                        Declaration of goods
+                    </div>
+                </div>
+                <div class="step-item">
+                    <button class="step-button text-center collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                        4
+                    </button>
+                    <div class="step-title">
+                        Special offers
+                    </div>
+                </div>
+
+            </div>
+
+            <div>
+                <div id="headingOne">
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#formSteps">
+                    <div class="card-body">
+
+                        <div class="card">
+                            <div class="section-header">
+                                <div class="header-title">
+                                    <div>
+                                    </div>
+                                    <h3 class="title">Customer Information</h3>
+
+                                </div>
+                                <div class="section-header-content">
+                                    <p>Thông tin khách hàng </p>
+                                    <p class="required">* Required</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card section">
+                            <div class="section-content">
+                                <h4>Email <span class="required">*</span></h4>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    placeholder="name@example.com">
+                                <p><span class="required error error_email"></span></p>
+                            </div>
+                        </div>
+
+                        <div class="card section">
+                            <div class="section-content">
+                                <h4>Are you? * <span class="required">*</span></h4>
+                                <p>Bạn là?</p>
+                                <div class="form-check">
+                                    <input class="form-check-input" onclick="checkerChanger(true)" name="customer"
+                                        type="radio" value="old_customer">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        Khách cũ
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" onclick="checkerChanger(false)" name="customer"
+                                        type="radio" value="new_customer">
+                                    <label class="form-check-label" for="flexCheckChecked">
+                                        Khách mới
+                                    </label>
+                                </div>
+                                <p><span class="required error error_customer"></span></p>
+                            </div>
+                        </div>
+
+                        <button class="btn my-2 btn-primary text-center" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseOne">
+                            Next
+                        </button>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div id="headingTwo">
+
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#formSteps">
+
+                    <div id="section-two" class="card-body disable">
+
+                        <div class="card">
+                            <div class="section-header">
+                                <div class="header-title">
+                                    <div>
+                                    </div>
+                                    <h3 class="title">Old customer information</h3>
+
+                                </div>
+                                <div class="section-header-content">
+                                    <p>Thông tin khách hàng cũ</p>
+                                    <p class="required">* Required</p>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card section">
+                            <div class="section-content">
+                                <h4>Nhập email <span class="required">*</span></h4>
+                                <p>Email tìm kiếm khách hàng cũ </p>
+                                <input type="text" id="user-email" class="form-control" placeholder="Your answer ">
+                                <p><span class="required error error_user_email"></span></p>
+                            </div>
+                        </div>
+
+                        <div class="card section">
+                            <div class="section-content">
+                                <h4>Sender's phone number <span class="required">*</span></h4>
+                                <p>Số điện thoại khách hàng cũ </p>
+                                <input type="text" class="form-control" id="user-phone" placeholder="Your answer ">
+                                <p><span class="required error error_user_phone"></span></p>
+                            </div>
+                        </div>
+
+
+                        <button class="btn-sm my-2 btn-primary text-center" onclick="searchUser()" type="button">
+                            Search
+                        </button>
+
+
+                        <div id="result-search" class="disable">
+                            <div id="customer-old-body">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div id="section-there" class="card-body">
+
+                        <div class="card">
+                            <div class="section-header">
+                                <div class="header-title">
+                                    <div>
+                                    </div>
+                                    <h3 class="title">New customer information</h3>
+
+                                </div>
+                                <div class="section-header-content">
+                                    <p>Thông tin khách hàng mới</p>
+                                    <p class="required">* Required</p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="customer-new-body">
+                            <div id="customer-body">
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Sender's first and last name <span class="required">*</span></h4>
+                                        <p>Họ và tên người gửi </p>
+                                        <input type="text" class="form-control" name="sender_fn" id="sender_fn"
+                                            placeholder="Your answer ">
+                                        <p><span class="required error error_sender_fn"></span></p>
+                                    </div>
+                                </div>
+
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Sender's phone number <span class="required">*</span></h4>
+                                        <p>Số điện thoại </p>
+                                        <input type="text" class="form-control" name="sender_phone" id="sender_phone"
+                                            placeholder="Your answer ">
+                                        <p><span class="required error error_sender_phone"></span></p>
+                                    </div>
+                                </div>
+
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Sender's address <span class="required">*</span></h4>
+                                        <p>Địa chỉ người gửi </p>
+                                        <input type="text" class="form-control" name="sender_address"
+                                            id="sender_address" placeholder="Your answer">
+                                        <p><span class="required error error_sender_address"></span></p>
+                                    </div>
+                                    <div id="pac-card" class="card-body">
+
+                                    </div>
+                                    <div id="infowindow-content"></div>
+                                </div>
+
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Sender's email <span class="required">*</span></h4>
+                                        <p>Địa chỉ email người gửi </p>
+                                        <input type="text" class="form-control" name="sender_email" id="sender_email"
+                                            placeholder="Your answer ">
+                                        <p><span class="required error error_sender_email"></span></p>
+                                    </div>
+
+                                </div>
+
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Recipient's first and last name <span class="required">*</span></h4>
+                                        <p>Họ và tên người nhận</p>
+                                        <input type="text" class="form-control" name="recipient_fn" id="recipient_fn"
+                                            placeholder="Your answer ">
+                                        <p><span class="required error error_recipient_fn"></span></p>
+                                    </div>
+                                </div>
+
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Recipient's Address <span class="required">*</span></h4>
+                                        <p>Địa chỉ người nhận</p>
+                                        <input type="text" class="form-control" name="recipient_address"
+                                            id="recipient_address" placeholder="Your answer ">
+                                        <p><span class="required error error_recipient_address"></span></p>
+                                    </div>
+                                </div>
+
+                                <div class="card section">
+                                    <div class="section-content">
+                                        <h4>Recipient's phone number <span class="required">*</span></h4>
+                                        <p>số điện thoại người nhận</p>
+                                        <input type="text" class="form-control" name="recipient_phone"
+                                            id="recipient_phone" placeholder="Your answer ">
+                                        <p><span class="required error error_recipient_phone"></span></p>
+                                    </div>
+                                </div>
+
+                                <button class="btn my-2 btn-light text-center" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    back
+                                </button>
+
+                                <button class="btn my-2 btn-primary text-center" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseOne">
+                                    Next
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
 
 
-            <div class="item">
-                <p>Họ tên người gửi </p>
-                <div class="group-input">
-                    <input type="text" name="Full Name" placeholder="Họ và Tên" />
-                    <input type="tel" name="Phone" placeholder="Số điện thoại" />
+            <div>
+                <div id="headingThree">
+
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="collapseThree" data-bs-parent="#formSteps">
+                    <div class="card-body">
+
+                        <div class="">
+                            <div class="card section-header">
+                                <div class="header-title">
+                                    <div>
+                                    </div>
+                                    <h3 class="title">Declaration of goods</h3>
+                                </div>
+                                <div class="section-header-content">
+                                    <p>HU THUI CARGO will rely on the declaration to compensate for the
+                                        goods in the rare case of loss.</p>
+                                    <p>HU THUI CARGO sẽ dựa vào khai báo để bồi thường hàng hoá trong
+                                        trường hợp hy hữu có thất lạc xảy ra</p>
+
+                                </div>
+                            </div>
+
+                            <div class="card section">
+                                <div class="section-content">
+                                    <h4>Declaration of goods <span class="required">*</span></h4>
+                                    <p>Khai báo hàng hóa </p>
+                                    <textarea type="text" class="form-control" name='product' rows="5" id="product"
+                                        placeholder="Your answer"></textarea>
+
+                                    <p><span class="required error error_product"></span></p>
+                                </div>
+                            </div>
+
+                            <div class="card section">
+                                <div class="section-content">
+                                    <h4>Estimated total value of goods <span class="required">*</span></h4>
+                                    <p>Ước tính tổng giá trị hàng hoá </p>
+                                    <div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="estimated_value" type="radio"
+                                                value="Dưới $100 (công ty bảo hiểm 100%)">
+                                            <label class="form-check-label">
+                                                Dưới $100 (công ty bảo hiểm 100%)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="estimated_value"
+                                                value="Từ $100 đến $200 (công ty bảo hiểm 100%)">
+                                            <label class="form-check-label">
+                                                Từ $100 đến $200 (công ty bảo hiểm 100%)
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="estimated_value"
+                                                value="Trên $200 (công ty bảo hiểm theo chính sách gửi hàng)">
+                                            <label class="form-check-label">
+                                                Trên $200 (công ty bảo hiểm theo chính sách gửi hàng)
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" name="estimated_value" type="radio"
+                                                value="Other">
+                                            <label class="form-check-label">
+                                                Other : <input type="text" name="estimated_value_other"
+                                                    style="border: none; border-bottom: 2px solid #eee;display: inline-block; width: 350px;"
+                                                    class="ml-2 form-control-sm" placeholder="Your answer ">
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <p><span class="required error error_estimated_value"></span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <button class="btn my-2 btn-light text-center" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                                back
+                            </button>
+
+                            <button class="btn my-2 btn-primary text-center" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+                                Next
+                            </button>
+
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
-            <div class="item">
-                <p>Địa chỉ người gửi</p>
-                <input type="text" name="Street Address" placeholder="Địa chỉ người gửi" />
-            </div>
 
-            <div class="item">
-                <p>Địa chỉ email nhận thư</p>
-                <input type="text" name="Email" placeholder="Địa chỉ nhận thông báo qua email" />
-            </div>
+            <div>
+                <div id="headingFour">
 
-            <div class="item">
-                <p>Ngày hết hạn hóa đơn </p>
-                <input type="date" name="Due Date" placeholder="ngày hết hạn hóa đơn" />
-            </div>
-
-
-            <div class="item">
-                <h3>Thêm dữ liệu sản phẩm</h3>
-                <div class="group-input-product">
-                    <p>Sản phẩm 1</p>
-                    <input class="calculate" type="text" name="unit1" placeholder="Thêm sản phẩm" />
-                    <input class="calculate" type="text" name="description1" placeholder="Mô tả sản phẩm " />
-                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="text" name="price1" placeholder="Giá" />
                 </div>
-                <div class="group-input-product">
-                    <p>Sản phẩm 2</p>
-                    <input class="calculate" type="text" name="unit2" placeholder="Thêm sản phẩm" />
-                    <input class="calculate" type="text" name="description2" placeholder="Mô tả sản phẩm " />
-                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="text" name="price2" placeholder="Giá" />
-                </div>
-                <div class="group-input-product">
-                    <p>Sản phẩm 3</p>
-                    <input class="calculate" type="text" name="unit3" placeholder="Thêm sản phẩm" />
-                    <input class="calculate" type="text" name="description3" placeholder="Mô tả sản phẩm " />
-                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="text" name="price3" placeholder="Giá" />
-                </div>
-                <div class="group-input-product">
-                    <p>Sản phẩm 4</p>
-                    <input class="calculate" type="text" name="unit4" placeholder="Thêm sản phẩm" />
-                    <input class="calculate" type="text" name="description4" placeholder="Mô tả sản phẩm " />
-                    <input onmouseenter="calculate(this)" onmouseleave="calculate" class="calculate price" type="number"
-                        name="text" placeholder="Giá" />
-                </div>
-                <div class="group-input-product">
-                    <p>Sản phẩm 5</p>
-                    <input class="calculate" type="text" name="unit5" placeholder="Thêm sản phẩm 1" />
-                    <input class="calculate" type="text" name="description5" placeholder="Mô tả sản phẩm " />
-                    <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
-                        type="text" name="price5" placeholder="Giá" />
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-bs-parent="#formSteps">
+
+
+
+                    <div class="card-body">
+
+                        <div class="card">
+                            <div class="section-header">
+                                <div class="header-title">
+                                    <div>
+                                    </div>
+                                    <h3 class="title">Congratulations, you can get special offers!</h3>
+
+                                </div>
+                                <div class="section-header-content">
+                                    <p>Xin chúc mừng! bạn có thể nhận được ưu đãi đặc biệt</p>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="card section">
+                            <div class="section-content">
+                                <h4>Special Offer </h4>
+                                <p>Ưu đãi đặc biệt </p>
+
+                                <div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="offer" type="radio"
+                                            value="FREE BOX ($6.99 value)">
+                                        <label class="form-check-label">
+                                            FREE BOX ($6.99 value)
+
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="offer" type="radio"
+                                            value="FREE PACKING ($9.99 value)">
+                                        <label class="form-check-label">
+                                            FREE PACKING ($9.99 value)
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="offer" type="radio"
+                                            value=" FREE GIFT ($9.99 value)">
+                                        <label class="form-check-label">
+                                            FREE GIFT ($9.99 value)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <button class="btn my-2 btn-light text-center" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                            back
+                        </button>
+
+                        <button class="btn-sm my-2 mt-3 btn-primary text-center" data-bs-toggle="collapse"
+                            type="submit">
+                            Submit
+                        </button>
+                    </div>
+
+
                 </div>
             </div>
 
-            <div class="item">
-                <p>Mã Giảm Giá </p>
-                <input onmouseleave="calculate(this)" class="calculate discount" type="number" name="discount" />
-            </div>
+        </div>
+    </form>
 
-            <div class="item">
-                <p> Thành tiền : $ <span id="total">0</span></p>
-            </div>
+    <!--
+    <div class="container">
+        <div class="main-form" id="from">
+            <form name="submit-to-google-sheet">
 
-            <div class="btn-block">
-                <button type="submit">Tạo hóa đơn</button>
-            </div>
-        </form>
+                <div>
+                    <h2>
+                        Customer Information
+                    </h2>
+                    <p>Thông tin khách hàng</p>
+                </div>
+
+                <button class="next" type="button">Next</button>
+
+                <section>
+
+
+
+                    <h1>Biểu mẫu demo tạo hóa đơn cho nhân viên</h1>
+                    <h3>Các trường sau đây là giả định theo nhu cầu</h3>
+                    <div class="item">
+                        <p>Mã số hóa đơn - Ngày tham chiếu (ngày tạo)</p>
+                        <div class="group-input">
+                            <input type="text" name="Invoice Number" placeholder="số hóa đơn" />
+                            <input type="date" name="Invoice Date" placeholder="ngày tạo hóa đơn : 20-12-2022" />
+                        </div>
+                    </div>
+
+
+                    <div class="item">
+                        <p>Họ tên người gửi </p>
+                        <div class="group-input">
+                            <input type="text" name="Full Name" placeholder="Họ và Tên" />
+                            <input type="tel" name="Phone" placeholder="Số điện thoại" />
+                        </div>
+                    </div>
+                    <div class="item">
+                        <p>Địa chỉ người gửi</p>
+                        <input type="text" name="Street Address" placeholder="Địa chỉ người gửi" />
+                    </div>
+
+                    <div class="item">
+                        <p>Địa chỉ email nhận thư</p>
+                        <input type="text" name="Email" placeholder="Địa chỉ nhận thông báo qua email" />
+                    </div>
+
+                    <div class="item">
+                        <p>Ngày hết hạn hóa đơn </p>
+                        <input type="date" name="Due Date" placeholder="ngày hết hạn hóa đơn" />
+                    </div>
+
+
+                    <div class="item">
+                        <h3>Thêm dữ liệu sản phẩm</h3>
+                        <div class="group-input-product">
+                            <p>Sản phẩm 1</p>
+                            <input class="calculate" type="text" name="unit1" placeholder="Thêm sản phẩm" />
+                            <input class="calculate" type="text" name="description1" placeholder="Mô tả sản phẩm " />
+                            <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                                type="text" name="price1" placeholder="Giá" />
+                        </div>
+                        <div class="group-input-product">
+                            <p>Sản phẩm 2</p>
+                            <input class="calculate" type="text" name="unit2" placeholder="Thêm sản phẩm" />
+                            <input class="calculate" type="text" name="description2" placeholder="Mô tả sản phẩm " />
+                            <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                                type="text" name="price2" placeholder="Giá" />
+                        </div>
+                        <div class="group-input-product">
+                            <p>Sản phẩm 3</p>
+                            <input class="calculate" type="text" name="unit3" placeholder="Thêm sản phẩm" />
+                            <input class="calculate" type="text" name="description3" placeholder="Mô tả sản phẩm " />
+                            <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                                type="text" name="price3" placeholder="Giá" />
+                        </div>
+                        <div class="group-input-product">
+                            <p>Sản phẩm 4</p>
+                            <input class="calculate" type="text" name="unit4" placeholder="Thêm sản phẩm" />
+                            <input class="calculate" type="text" name="description4" placeholder="Mô tả sản phẩm " />
+                            <input onmouseenter="calculate(this)" onmouseleave="calculate" class="calculate price"
+                                type="number" name="text" placeholder="Giá" />
+                        </div>
+                        <div class="group-input-product">
+                            <p>Sản phẩm 5</p>
+                            <input class="calculate" type="text" name="unit5" placeholder="Thêm sản phẩm 1" />
+                            <input class="calculate" type="text" name="description5" placeholder="Mô tả sản phẩm " />
+                            <input onmouseenter="calculate(this)" onmouseleave="calculate(this)" class="calculate price"
+                                type="text" name="price5" placeholder="Giá" />
+                        </div>
+                    </div>
+                </section>
+
+                <button class="next" type="button">Next</button>
+
+
+                <section>
+
+                    <div class="item">
+                        <p>Mã Giảm Giá </p>
+                        <input onmouseleave="calculate(this)" class="calculate discount" type="number"
+                            name="discount" />
+                    </div>
+
+                    <div class="item">
+                        <p> Thành tiền : $ <span id="total">0</span></p>
+                    </div>
+
+                    <div class="btn-block">
+                        <button type="submit">Tạo hóa đơn</button>
+                    </div>
+
+                </section>
+
+            </form>
+        </div>
+
     </div>
+    -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+    <script>
+        const stepButtons = document.querySelectorAll('.step-btn');
+        const progress = document.querySelector('#progress');
+
+        Array.from(stepButtons).forEach((button, index) => {
+            button.addEventListener('click', () => {
+                progress.setAttribute('value', index * 100 / (stepButtons.length - 1));//there are 3 buttons. 2 spaces.
+
+                stepButtons.forEach((item, secindex) => {
+                    if (index > secindex) {
+                        item.classList.add('done');
+                    }
+                    if (index < secindex) {
+                        item.classList.remove('done');
+                    }
+                })
+            })
+        })
+
+        function checkerChanger(customerOld) {
+            if (!customerOld) {
+                document.querySelector("#section-there").classList.add("enable")
+                document.querySelector("#section-there").classList.remove("disable")
+                document.querySelector("#section-two").classList.add("disable")
+                document.querySelector("#section-two").classList.remove("enable");
+                let newCustomer = document.getElementById("customer-new-body");
+                let oldCustomer = document.getElementById("customer-old-body");
+                let _node = document.getElementById("customer-body");
+                oldCustomer && oldCustomer.children.length > 0 ? oldCustomer.removeChild(_node) : null;
+                newCustomer.appendChild(_node);
+            } else {
+                document.querySelector("#section-there").classList.add("disable")
+                document.querySelector("#section-there").classList.remove("enable")
+                document.querySelector("#section-two").classList.add("enable")
+                document.querySelector("#section-two").classList.remove("disable");
+                let newCustomer = document.getElementById("customer-new-body");
+                let oldCustomer = document.getElementById("customer-old-body");
+                let _node = document.getElementById("customer-body");
+                newCustomer && newCustomer.children.length > 0 ? newCustomer.removeChild(_node) : null;
+                oldCustomer.appendChild(_node);
+            }
+
+        }
+
+        function searchUser() {
+            let email = document.getElementById("user-email").value;
+            let phone = document.getElementById("user-phone").value;
+            if (email && phone) {
+                // document.getElementById("result-search").classList.add("enable");
+                document.getElementById("result-search").classList.remove("disable");
+                document.getElementById("result-search").scrollIntoView();
+            }
+        }
+    </script>
+
+
     <script>
         // https://docs.google.com/spreadsheets/d/1UMDUIxw8m6i4mKjOE4BLl7PsGKN1NgUdmTOn9uNpz_U/edit#gid=0
         // https://script.google.com/macros/s/AKfycbzogA12W4n6aHci8dTRX8pBIiHEOjDmqmKoBqUNM_3_bu5SzFq7sZ9EdX07aotWA6Bt/exec
 
 
+
+        $(function () {
+            $("#from").steps({
+                headerTag: ".h2",
+                bodyTag: "section",
+                transitionEffect: "slideLeft"
+            });
+        });
+
         var submit = false;
         var total = 0;
         var discount = 0;
         var sub_total = 0;
-
-        var erros = {
-            field_1: null,
-            field_2: null,
-            field_3: null,
-            field_4: null,
-            field_5: null,
-            field_6: null,
-            field_7: null,
-            field_8: null,
-            field_9: null,
-            field_10: null,
-            field_11: null,
-        }
 
 
         function calculate() {
@@ -313,112 +682,163 @@
         const scriptURL = 'https://script.google.com/macros/s/AKfycbwgmIysuSY6uez6VdzmVzBauouq0xwbkF-VTOBKHM4-rsFm4XlwPafZaEvPEp8Nh-9B/exec'
         const form = document.forms['submit-to-google-sheet']
 
-        form.addEventListener('submit', e => {
+        form.addEventListener('submit', async (e) => {
 
-            e.preventDefault()
+            e.preventDefault();
 
+            // variable error
+            var erros = {};
+            // variable data
+            var obj = {};
 
-            var _form = new FormData(document.querySelector('form'))
+            // handler form
+            var _form = $('form[name="submit-to-google-sheet"]').serializeArray();
+            var _arrData = _form.filter(item => {
+                if (item.value) {
+                    obj[item.name] = item.value
+                    return item;
+                }
 
-
-            // start validate 
-            let form = {
-                ivcNumber: _form.get("Invoice Number"),
-                ivcDate: _form.get("Invoice Date"),
-                fullname: _form.get("Full Name"),
-                phone: _form.get("Phone"),
-                add: _form.get("Street Address"),
-                email: _form.get("Email"),
-                DueDate: _form.get("Due Date"),
-                unit1: _form.get("unit1"),
-                description1:_form.get("description1"),
-                price1: _form.get("price1")
-            }
-
-            if (!validate.isString(form.ivcNumber) || validate.isEmpty(form.ivcNumber)) {
-                erros.field_1 = "Mã hóa đơn phải là chuỗi kí tự không được để trống"
-            }else{
-                erros.field_1 = null
-            }
-
-            if (validate.isEmpty(form.ivcDate)) {
-                erros.field_2 = "Ngày tạo hóa đơn cú pháp không hợp lệ"
-            }else{
-                erros.field_2 = null
-            }
-
-            if (validate.isEmpty(form.fullname)) {
-                erros.field_3 = "Tên người gửi không hợp lệ"
-            }else{
-                erros.field_3 = null
-            }
-
-            if (!validate.isNumber(Number(form.phone)) || validate.isEmpty(form.phone)) {
-               erros.field_4 = "Số phone không hợp lệ"
-            }else{
-                erros.field_4 = null
-            }
-
-            if ( validate.isEmpty(form.add)) {
-                erros.field_5 = "Địa chỉ người gửi không hợp lệ"
-            }else{
-                erros.field_5 = null
-            }
-
-            let checkErrEmail = validate({from: form.email}, {
-                    from: {
-                        email: true
-                    }
+                erros[item.name] = null;
             });
 
-
-            if(checkErrEmail){
-                erros.field_6 = "Địa chỉ email không hợp lệ"
-            }else{
-                erros.field_6 = null
+            // function if handler error validate return promise.reject
+            function checkValidateError(key) {
+                return new Promise((res, rej) => {
+                    console.log(key);
+                    if (erros[key]) {
+                        document.querySelector(".error_" + key).innerHTML = erros[key];
+                        document.querySelector(".error_" + key).classList.remove("error");
+                        rej(erros[key]);
+                    } else {
+                        document.querySelector(".error_" + key).innerHTML = '';
+                        document.querySelector(".error_" + key).classList.add("error");
+                        res(false);
+                    }
+                })
             }
 
 
-            if (validate.isDate(form.DueDate)) {
-                erros.field_7 = "Ngày tạo hết hạn hóa đơn không hợp lệ"
-            }else{
-                erros.field_7 = null
-            }
+            //             {
+            //     "email": "hoanghiep1x0@gmail.com",
+            //     "customer": "new_customer",
+            //     "sender_fn": "Trần Hoàng Hiệp",
+            //     "sender_phone": "0382994390",
+            //     "sender_address": "Tam Hiệp Phúc Thọ Hà Nội",
+            //     "sender_email": "hoanghiep1x0@gmail.com",
+            //     "recipient_fn": "hoangnam@gmail.com",
+            //     "recipient_phone": "0382994390",
+            //     "product": "product 1",
+            //     "estimated_value": "Từ $100 đến $200 (công ty bảo hiểm 100%)",
+            //     "offer": "FREE PACKING ($9.99 value)"
+            // }
 
+            // Check validate
 
-            if (!validate.isString(form.unit1) || validate.isEmpty(form.unit1)) {
-                erros.field_8 = "Tên sản phẩm phải là chuỗi và không được rỗng"
-            }else{
-                erros.field_8 = null
-            }
-
-            if (validate.isEmpty(form.description1)) {
-                erros.field_9 = "Mô tả sản phẩm không được rỗng"
-            }else{
-                erros.field_9 = null
-            }
-
-
-            if (!validate.isNumber(Number(form.price1)) || validate.isEmpty(form.price1)) {
-                erros.field_10= "Giá sản phẩm không được rỗng và phải là số hợp lệ"
-            }else{
-                erros.field_10 = null
-            }
-            
-            // end validate
-
-            submit = true;
-
-            for(key in erros){
-                let item = erros[key];
-                if(item){
-                    submit= false
-                   alert(item);
-                    console.log(item);
+            if (!obj['email'] || validate({ from: obj.email }, {
+                from: {
+                    email: true
                 }
+            })) {
+                erros['email'] = 'Địa chỉ email không hợp lệ'
+            } else {
+                erros['email'] = null;
             }
 
-            
+
+            if (!obj['customer']) {
+                erros['customer'] = 'Vui lòng lựa chọn câu trả lời của bạn.'
+            } else {
+                erros['customer'] = null;
+            }
+
+            if (!obj['sender_fn'] || !validate.isString(obj.sender_fn) || obj.sender_fn.match(/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/g)) {
+                erros['sender_fn'] = 'Câu trả lời không hợp lệ (Vui lòng điền họ tên của bạn..).'
+            } else {
+                erros['sender_fn'] = null;
+            }
+
+
+            if (!obj.sender_phone || !obj.sender_phone.match(new RegExp(/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/g)) || !obj.sender_phone.length > 9) {
+                erros['sender_phone'] = 'Không phải số điện thoại hợp lệ (Vui lòng nhập số điện thoại của bạn.).'
+            } else {
+                erros['sender_phone'] = null;
+            }
+
+            if (!obj['sender_address'] || !validate.isString(obj.sender_address) || !obj.sender_address.length > 16) {
+                erros['sender_address'] = 'Không phải địa chỉ hợp lệ  (Vui lòng nhập đầy đủ địa chỉ của bạn..)'
+            } else {
+                erros['sender_address'] = null;
+            }
+
+            if (!obj['sender_email'] || validate({ from: obj.email }, {
+                from: {
+                    email: true
+                }
+            })) {
+                erros['sender_email'] = 'Địa chỉ email người gửi không hợp lệ'
+            } else {
+                erros['sender_email'] = null;
+            }
+
+            if (!obj['recipient_fn'] || !validate.isString(obj.recipient_fn) || obj.recipient_fn.match(/^[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]*$/g)) {
+                erros['recipient_fn'] = 'Câu trả lời không hợp lệ (Vui lòng điền họ tên người nhận..).'
+            } else {
+                erros['recipient_fn'] = null;
+            }
+
+            if (!obj['recipient_phone'] || !obj.recipient_phone.match(new RegExp(/^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/g)) || !obj.sender_phone.length > 9) {
+                erros['recipient_phone'] = 'Không phải số điện thoại hợp lệ (Vui lòng nhập số điện thoại của bạn.).'
+            } else {
+                erros['recipient_phone'] = null;
+            }
+
+
+            if (!obj['recipient_address'] || !validate.isString(obj.recipient_address) || !obj.recipient_address.length > 16) {
+                erros['recipient_address'] = 'Không phải địa chỉ hợp lệ (Vui lòng nhập đầy đủ địa chỉ phù hợp..)'
+            } else {
+                erros['recipient_address'] = null;
+            }
+
+            if (!obj['product'] || !validate.isString(obj.product) || !obj.product.length > 6) {
+                erros['product'] = 'Vui lòng nhập dữ liệu  hợp lệ..)'
+            } else {
+                erros['product'] = null;
+            }
+
+            if (!obj['estimated_value'] || !validate.isString(obj.product) || !obj.product.length > 6) {
+                erros['estimated_value'] = 'Vui lòng chọn gói bảo hiểm hàng hóa phù hợp..)'
+            } else {
+                erros['estimated_value'] = null;
+            }
+
+            let validates = [
+                checkValidateError('email'),
+                checkValidateError('customer'),
+                checkValidateError('sender_fn'),
+                checkValidateError('sender_phone'),
+                checkValidateError('sender_address'),
+                checkValidateError('sender_email'),
+                checkValidateError('recipient_fn'),
+                checkValidateError('recipient_phone'),
+                checkValidateError('recipient_address'),
+                checkValidateError('product'),
+                checkValidateError('estimated_value')
+            ]
+
+            // if true => error validate
+            // if false ==> not error validate
+            let errored = await Promise.all(validates).then(data => false).catch(err => err);
+
+            console.log("validate error => ", errored);
+
+            if (!errored) {
+                console.log("submit form")
+            } else {
+                alert("Dữ liệu chưa phù hợp vui lòng kiểm tra lại biểu mẫu.")
+                console.log("chặn submit form ", errored)
+            }
+
 
             if (submit) {
                 _form.append("total", total);
@@ -437,8 +857,34 @@
 
         })
 
+
     </script>
 
+
+
+
+    <script>
+        function initAutocomplete() {
+            // Create the autocomplete object, restricting the search to geographical
+            // location types.
+            autocomplete = new google.maps.places.Autocomplete(
+                /** @type {!HTMLInputElement} */
+                (document.getElementById('sender_address')), {
+                types: ['geocode']
+            });
+
+            autocomplete = new google.maps.places.Autocomplete(
+                /** @type {!HTMLInputElement} */
+                (document.getElementById('recipient_address')), {
+                types: ['geocode']
+            });
+
+        }
+    </script>
+
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initAutocomplete&libraries=places&v=weekly"
+        async></script>
 
 </body>
 
